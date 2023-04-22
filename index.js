@@ -1,9 +1,12 @@
 const express = require("express");
+var cors = require("cors");
 const { Configuration, OpenAIApi } = require("openai");
 require("dotenv").config();
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -14,6 +17,7 @@ const openai = new OpenAIApi(configuration);
 app.use(express.json());
 
 app.get("/", async (req, res) => {
+    console.log("New Story");
     try {
         const message = "start a random adventure story";
         const completion = await openai.createChatCompletion({
@@ -27,11 +31,24 @@ app.get("/", async (req, res) => {
                 { role: "user", content: message },
             ],
         });
+        console.log(completion.data.choices[0].message.content);
         res.send(completion.data.choices[0].message.content);
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
     }
+    // res.send({
+    //     image: "You are standing at the entrance of a dark cave.",
+    //     story: "You traverse deep into the cave, following the dim light of your torch. After a while, you come across a fork in the path. The left path looks narrow, but the right path is dark and foreboding. Suddenly, you hear a faint growling noise coming from the right path. What do you want to do?",
+    //     enemy: true,
+    //     playerHealth: "100/100",
+    //     enemyHealth: "75/100",
+    //     options: [
+    //         "Take the left path",
+    //         "Investigate the growling noise",
+    //         "Retreat from the cave",
+    //     ],
+    // });
 });
 
 function extractJsonFromString(str) {
@@ -44,6 +61,7 @@ function extractJsonFromString(str) {
 }
 
 app.post("/chat", async (req, res) => {
+    console.log("Continue Story");
     try {
         const userResponse = req.body.userResponse;
         const story = req.body.story;
@@ -62,6 +80,7 @@ app.post("/chat", async (req, res) => {
                 { role: "user", content: userResponse },
             ],
         });
+        console.log(completion.data.choices[0].message.content);
         res.send(
             JSON.parse(
                 extractJsonFromString(
@@ -73,9 +92,19 @@ app.post("/chat", async (req, res) => {
         console.log(error);
         res.status(500).send(error);
     }
+
+    // res.send({
+    //     image: "<insert image of the beast here>",
+    //     story: "You slowly approach the growling noise, readying your weapon as you walk. As you turn the corner, you are confronted by a snarling, fur-covered beast with razor-sharp teeth. It's an enemy!",
+    //     enemy: true,
+    //     playerHealth: "100/100",
+    //     enemyHealth: "100/100",
+    //     options: ["Fight the enemy", "Try to calm the beast", "Run away"],
+    // });
 });
 
 app.post("/image", async (req, res) => {
+    console.log("New Image");
     try {
         const prompt = req.body.prompt + ", in starry night style";
         if (!prompt) return res.status(400).send("prompt is required");

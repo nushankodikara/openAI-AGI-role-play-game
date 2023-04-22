@@ -52,6 +52,10 @@ To start the game, run the following command:
 npm start
 ```
 
+This will start the game server on port 3000. You can change the port by changing the PORT variable in the index.js file.
+
+Goto [GUI Repository](https://github.com/nushankodikara/openAI-AGI-role-play-game-GUI) and follow the instructions to load the GUI.
+
 ## Contributing
 
 If you would like to contribute to the project, feel free to submit a pull request with your changes. Before doing so, please read the CONTRIBUTING.md file for guidelines on how to contribute.

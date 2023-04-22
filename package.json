@@ -1,0 +1,20 @@
+{
+    "name": "openai-agi-role-play-game",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    },
+    "keywords": [],
+    "author": "Nushan Kodikara",
+    "license": "ISC",
+    "dependencies": {
+        "openai": "^3.2.1",
+        "dotenv": "^16.0.3"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.22"
+    }
+}

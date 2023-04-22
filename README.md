@@ -52,10 +52,10 @@ To start the game, run the following command:
 npm start
 ```
 
-Contributing
+## Contributing
 
 If you would like to contribute to the project, feel free to submit a pull request with your changes. Before doing so, please read the CONTRIBUTING.md file for guidelines on how to contribute.
 
-License
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for more information.

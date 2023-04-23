@@ -16,22 +16,23 @@ const openai = new OpenAIApi(configuration);
 
 app.use(express.json());
 
-app.get("/", async (req, res) => {
+app.get("/newStory/:type", async (req, res) => {
+    const type = req.params.type;
     console.log("New Story");
     try {
-        const message = "start a random adventure story";
+        const message = `start a random adventure story in the style of ${type}`;
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             messages: [
                 {
                     role: "system",
                     content:
-                        'You are an adventure game AI. please return the data in the following format only {"image":"description for a story related image", "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }',
+                        'You are an adventure game AI. please return the data in the following format only { "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }',
                 },
                 { role: "user", content: message },
             ],
         });
-        console.log(completion.data.choices[0].message.content);
+        // console.log(completion.data.choices[0].message.content);
         res.send(completion.data.choices[0].message.content);
     } catch (error) {
         console.log(error);
@@ -60,7 +61,8 @@ function extractJsonFromString(str) {
     return match[0];
 }
 
-app.post("/chat", async (req, res) => {
+app.post("/continueStory/:type", async (req, res) => {
+    const type = req.params.type;
     console.log("Continue Story");
     try {
         const userResponse = req.body.userResponse;
@@ -73,14 +75,13 @@ app.post("/chat", async (req, res) => {
             messages: [
                 {
                     role: "system",
-                    content:
-                        'return the data in the following format only {"image":"description for a story related image", "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }',
+                    content: `continue the ${type} like story in the following format { "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }`,
                 },
                 { role: "assistant", content: story },
                 { role: "user", content: userResponse },
             ],
         });
-        console.log(completion.data.choices[0].message.content);
+        // console.log(completion.data.choices[0].message.content);
         res.send(
             JSON.parse(
                 extractJsonFromString(

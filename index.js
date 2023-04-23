@@ -56,7 +56,8 @@ function extractJsonFromString(str) {
     const jsonRegex = /\{.*\}/gs;
     const match = str.match(jsonRegex);
     if (!match) {
-        return null; // no JSON object found
+        console.log("No JSON object found");
+        return null;
     }
     return match[0];
 }
@@ -74,8 +75,8 @@ app.post("/continueStory/:type", async (req, res) => {
             model: "gpt-3.5-turbo",
             messages: [
                 {
-                    role: "system",
-                    content: `continue the ${type} like story in the following format { "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }`,
+                    role: "user",
+                    content: `continue the ${type} like story in the following format only { "story":"continue the story...", "enemy":trueOrFalse, "playerHealth":"x/100", "enemyHealth":"x/100", "options":["option1","option2","option3","option4"] }`,
                 },
                 { role: "assistant", content: story },
                 { role: "user", content: userResponse },
